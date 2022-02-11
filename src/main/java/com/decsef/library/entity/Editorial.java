@@ -17,6 +17,9 @@ public class Editorial {
     @Column(name = "id", nullable = false)
     private UUID id;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "editorial")
+    private Set<Book> books;
+
     @Column(name = "name", nullable = false)
     private String name;
 
@@ -31,7 +34,4 @@ public class Editorial {
 
     @Column(name = "date_foundation", nullable = false)
     private Date dateFoundation;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "editorial")
-    private Set<Book> books;
 }

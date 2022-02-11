@@ -2,10 +2,9 @@ package com.decsef.library.entity;
 
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -13,7 +12,7 @@ import java.util.UUID;
 public class Student {
 
     @Id
-    @GeneratedValue
+//    @GeneratedValue
     @Column(name = "id", nullable = false)
     private UUID id;
 

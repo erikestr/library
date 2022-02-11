@@ -1,24 +1,32 @@
 package com.decsef.library.entity;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Table(name = "book")
-@Data
+@Getter
+@Setter
 public class Book {
     @Id
+//    @GeneratedValue
     @Column(name = "id", nullable = false)
     private UUID id;
 
+    @OneToMany(mappedBy = "bookId")
+    private List<Loans> loans;
+
     @ManyToOne
-    @JoinColumn(name = "editorial_id")
+    @JoinColumn
     private Editorial editorial;
 
     @ManyToOne
-    @JoinColumn(name = "author_id")
+    @JoinColumn
     private Author author;
 
     @Column(name = "year", nullable = false)
@@ -31,7 +39,7 @@ public class Book {
     private String edition;
 
     @Column(name = "pages", nullable = false)
-    private String pages;
+    private int pages;
 
     @Column(name = "image_url")
     private String imageUrl;

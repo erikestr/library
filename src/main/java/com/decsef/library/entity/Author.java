@@ -13,6 +13,9 @@ public class Author {
     @Column(name = "id", nullable = false)
     private UUID id;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "author")
+    private Set<Book> books;
+
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
@@ -45,7 +48,4 @@ public class Author {
 
     @Column(name = "remarkable_work")
     private String remarkableWork;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "author")
-    private Set<Book> books;
 }
