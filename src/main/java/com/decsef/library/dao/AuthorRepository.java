@@ -8,4 +8,5 @@ import java.util.UUID;
 
 @RepositoryRestResource
 public interface AuthorRepository extends JpaRepository<Author, UUID> {
+    Author findAllById(UUID uuid);
 }

@@ -31,25 +31,34 @@ public class LoanService {
         Student student = studentRepository.findAllById(UUID.fromString(studentUUID));
         Book book = bookRepository.findAllById(UUID.fromString(bookUUID));
 
+        // TODO: id book.id exists
+        // TODO: if bookUUID.quantity > 0 then ok
+        // TODO: id student.id exists
 
         if (student != null && book != null){
+            if (book.getQuantity() > 0){
 
-            Loans loans = new Loans();
+                Loans loans = new Loans();
 
-            loans.setId(UUID.randomUUID());
-            loans.setExpirationLoan(Date.valueOf(LocalDate.now().plusDays(5)));
-            loans.setStatusReturn(LoanStatus.PERFECT);
-            loans.setStudentId(student);
-            loans.setBookId(book);
+                loans.setId(UUID.randomUUID());
+                loans.setExpirationLoan(Date.valueOf(LocalDate.now().plusDays(5)));
+                loans.setStatusDelivery(LoanStatus.PERFECT);
+                loans.setStudentId(student);
+                loans.setBookId(book);
 
-            loansRepository.save(loans);
+                loansRepository.save(loans);
 
-            return "pass";
+                return "pass";
+            }else {
+
+                throw new IllegalStateException("the book is not available");
+            }
         }
 
-        System.out.println(student.toString());
-
-
         return "fail";
+    }
+
+    public void decrementBookQuantity(Book book){
+
     }
 }

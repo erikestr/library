@@ -8,4 +8,5 @@ import java.util.UUID;
 
 @RepositoryRestResource
 public interface EditorialRepository extends JpaRepository<Editorial, UUID> {
+    Editorial findAllById(UUID uuid);
 }

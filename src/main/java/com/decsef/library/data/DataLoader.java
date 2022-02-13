@@ -31,7 +31,7 @@ public class DataLoader implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
 
         editorialRepository.save(new Editorial(
-                UUID.fromString("e7ade77d-9412-45de-9f86-59e144443dd2"),
+                UUID.fromString("e7ade77d-9412-45de-9f86-59e144443dd0"),
                 "Editorial 1",
                 "Mexico",
                 "CDMX",
@@ -39,7 +39,7 @@ public class DataLoader implements ApplicationRunner {
                 java.sql.Date.valueOf(LocalDate.now())
         ));
         editorialRepository.save(new Editorial(
-                UUID.fromString("e7ade77d-9412-45de-9f86-59e144443dd3"),
+                UUID.fromString("e7ade77d-9412-45de-9f86-59e144443dd2"),
                 "Editorial 2",
                 "Mexico",
                 "CDMX",
@@ -48,7 +48,7 @@ public class DataLoader implements ApplicationRunner {
         ));
 
         authorRepository.save(new Author(
-                UUID.fromString("e7ade77d-9412-45de-9f86-59e144443dd4"),
+                UUID.fromString("e7ade77d-9412-45de-9f86-59e144443dd1"),
                 "Author",
                 "1",
                 "Mexican",
@@ -62,7 +62,7 @@ public class DataLoader implements ApplicationRunner {
                 "Book"
         ));
         authorRepository.save(new Author(
-                UUID.fromString("e7ade77d-9412-45de-9f86-59e144443dd5"),
+                UUID.fromString("e7ade77d-9412-45de-9f86-59e144443dd3"),
                 "Author",
                 "2",
                 "Mexican",
@@ -77,22 +77,34 @@ public class DataLoader implements ApplicationRunner {
         ));
 
         bookRepository.save(new Book(
-                UUID.fromString("e7ade77d-9412-45de-9f86-59e144443dde"),
-                "2019","book 1","1r", 100));
+                UUID.fromString("e7ade77d-9412-45de-9f86-59e144443dd4"),
+                "2019",
+                "book 1",
+                "1r",
+                100,
+                editorialRepository.findAllById(UUID.fromString("e7ade77d-9412-45de-9f86-59e144443dd0")),
+                authorRepository.findAllById(UUID.fromString("e7ade77d-9412-45de-9f86-59e144443dd1"))
+        ));
         bookRepository.save(new Book(
-                UUID.fromString("e7ade77d-9412-45de-9f86-59e144443ddf"),
-                "2018","book 2","2a", 150));
+                UUID.fromString("e7ade77d-9412-45de-9f86-59e144443dd5"),
+                "2018",
+                "book 2",
+                "2a",
+                150,
+                editorialRepository.findAllById(UUID.fromString("e7ade77d-9412-45de-9f86-59e144443dd2")),
+                authorRepository.findAllById(UUID.fromString("e7ade77d-9412-45de-9f86-59e144443dd3"))
+        ));
 
         studentRepository.save(new Student(
-                UUID.fromString("e7ade77d-9412-45de-9f86-59e144443dd0"),
+                UUID.fromString("e7ade77d-9412-45de-9f86-59e144443dd6"),
                 "Erik",
                 "Estrada",
                 "Av. Juarez 123"
         ));
         studentRepository.save(new Student(
-                UUID.fromString("e7ade77d-9412-45de-9f86-59e144443dd1"),
-                "Pamela",
-                "Quezada",
+                UUID.fromString("e7ade77d-9412-45de-9f86-59e144443dd7"),
+                "Mariam",
+                "Perez",
                 "Av. Juarez 123"
         ));
     }

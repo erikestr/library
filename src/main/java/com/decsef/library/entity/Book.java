@@ -22,11 +22,11 @@ public class Book {
     private List<Loans> loans;
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(nullable = false)
     private Editorial editorial;
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(nullable = false)
     private Author author;
 
     @Column(name = "year", nullable = false)
@@ -45,14 +45,16 @@ public class Book {
     private String imageUrl;
 
     @Column(name = "quantity")
-    private String quantity;
+    private int quantity;
 
-    public Book(UUID id, String year, String tittle, String edition, int pages) {
+    public Book(UUID id, String year, String tittle, String edition, int pages, Editorial editorial, Author author) {
         this.id = id;
         this.year = year;
         this.tittle = tittle;
         this.edition = edition;
         this.pages = pages;
+        this.editorial = editorial;
+        this.author = author;
     }
 
     public Book() {
