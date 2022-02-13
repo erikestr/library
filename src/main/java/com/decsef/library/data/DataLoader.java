@@ -83,7 +83,8 @@ public class DataLoader implements ApplicationRunner {
                 "1r",
                 100,
                 editorialRepository.findAllById(UUID.fromString("e7ade77d-9412-45de-9f86-59e144443dd0")),
-                authorRepository.findAllById(UUID.fromString("e7ade77d-9412-45de-9f86-59e144443dd1"))
+                authorRepository.findAllById(UUID.fromString("e7ade77d-9412-45de-9f86-59e144443dd1")),
+                2
         ));
         bookRepository.save(new Book(
                 UUID.fromString("e7ade77d-9412-45de-9f86-59e144443dd5"),
@@ -92,7 +93,8 @@ public class DataLoader implements ApplicationRunner {
                 "2a",
                 150,
                 editorialRepository.findAllById(UUID.fromString("e7ade77d-9412-45de-9f86-59e144443dd2")),
-                authorRepository.findAllById(UUID.fromString("e7ade77d-9412-45de-9f86-59e144443dd3"))
+                authorRepository.findAllById(UUID.fromString("e7ade77d-9412-45de-9f86-59e144443dd3")),
+                2
         ));
 
         studentRepository.save(new Student(

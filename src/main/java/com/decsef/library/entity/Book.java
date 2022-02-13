@@ -47,7 +47,7 @@ public class Book {
     @Column(name = "quantity")
     private int quantity;
 
-    public Book(UUID id, String year, String tittle, String edition, int pages, Editorial editorial, Author author) {
+    public Book(UUID id, String year, String tittle, String edition, int pages, Editorial editorial, Author author, int quantity) {
         this.id = id;
         this.year = year;
         this.tittle = tittle;
@@ -55,6 +55,7 @@ public class Book {
         this.pages = pages;
         this.editorial = editorial;
         this.author = author;
+        this.quantity = quantity;
     }
 
     public Book() {

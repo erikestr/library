@@ -1,6 +1,7 @@
 package com.decsef.library.entity;
 
 import lombok.Data;
+import lombok.Generated;
 import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
 import java.util.Date;
@@ -10,6 +11,7 @@ import java.util.UUID;
 @Data
 public class Loans {
     @Id
+    @Generated
     @Column(name = "id", nullable = false)
     private UUID id;
 
