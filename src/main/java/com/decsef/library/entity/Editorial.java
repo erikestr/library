@@ -1,6 +1,5 @@
 package com.decsef.library.entity;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -34,4 +33,17 @@ public class Editorial {
 
     @Column(name = "date_foundation", nullable = false)
     private Date dateFoundation;
+
+    public Editorial(UUID id, String name, String country, String state, String city, Date dateFoundation) {
+        this.id = id;
+        this.name = name;
+        this.country = country;
+        this.state = state;
+        this.city = city;
+        this.dateFoundation = dateFoundation;
+    }
+
+    public Editorial() {
+
+    }
 }

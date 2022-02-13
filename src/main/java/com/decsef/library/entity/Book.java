@@ -46,4 +46,16 @@ public class Book {
 
     @Column(name = "quantity")
     private String quantity;
+
+    public Book(UUID id, String year, String tittle, String edition, int pages) {
+        this.id = id;
+        this.year = year;
+        this.tittle = tittle;
+        this.edition = edition;
+        this.pages = pages;
+    }
+
+    public Book() {
+
+    }
 }
