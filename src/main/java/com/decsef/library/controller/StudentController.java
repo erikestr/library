@@ -16,17 +16,17 @@ public class StudentController {
 
     private final StudentService studentService;
 
-    @PostMapping("/register")
+    @PostMapping
     public Student registerStudent(@RequestBody Student student){
         return studentService.registerStudent(student);
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping
     public boolean deleteStudent(@RequestBody Student student){
         return studentService.deleteStudent(student);
     }
 
-    @PutMapping("/update")
+    @PutMapping
     public Student updateStudent(@RequestBody Student student) {
         return studentService.updateStudent(student);
     }
