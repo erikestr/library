@@ -35,9 +35,9 @@ public class Loans {
 
     @Column(name = "status_delivery")
     @Enumerated(EnumType.STRING)
-    private LoanStatus statusDelivery;
+    private LoansStatus statusDelivery;
 
     @Column(name = "status_return")
     @Enumerated(EnumType.STRING)
-    private LoanStatus statusReturn;
+    private LoansStatus statusReturn;
 }

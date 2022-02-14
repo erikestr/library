@@ -3,8 +3,9 @@ package com.decsef.library.service;
 import com.decsef.library.dao.BookRepository;
 import com.decsef.library.dao.LoansRepository;
 import com.decsef.library.dao.StudentRepository;
+import com.decsef.library.dto.Loan;
 import com.decsef.library.entity.Book;
-import com.decsef.library.entity.LoanStatus;
+import com.decsef.library.entity.LoansStatus;
 import com.decsef.library.entity.Loans;
 import com.decsef.library.entity.Student;
 import lombok.AllArgsConstructor;
@@ -23,14 +24,11 @@ public class LoanService {
     private final BookRepository bookRepository;
     private final LoansRepository loansRepository;
 
-    public String registerLoan(String studentUUID, String bookUUID) {
+    /*public String registerLoan(String studentUUID, String bookUUID) {
 
         Student student = studentRepository.findAllById(UUID.fromString(studentUUID));
         Book book = bookRepository.findAllById(UUID.fromString(bookUUID));
 
-        // TODO: id book.id exists
-        // TODO: if bookUUID.quantity > 0 then ok
-        // TODO: id student.id exists
         // TODO: get DAta from JSON
 
         if (student != null && book != null){
@@ -39,8 +37,44 @@ public class LoanService {
                 Loans loans = new Loans();
 
                 loans.setId(UUID.randomUUID());
-                loans.setExpirationLoan(Date.valueOf(LocalDate.now().plusDays(5)));
-                loans.setStatusDelivery(LoanStatus.PERFECT);
+                loans.setExpirationLoan(Date.valueOf(LocalDate.now().plusDays(5)));                                     // TODO: get expiration from request
+                loans.setStatusDelivery(LoansStatus.PERFECT);                                                           // TODO: get status from request
+                loans.setStudentId(student);
+                loans.setBookId(book);
+
+                loansRepository.save(loans);
+
+                updateBookQuantity(book, bookUUID, false);
+                updateStudentLoanItems(student, studentUUID, false);
+
+                return "pass";
+            }else {
+
+                throw new IllegalStateException("the book is not available");
+            }
+        }
+
+        return "fail";
+    }*/
+
+    public String registerLoan(Loan loan) {
+
+        UUID bookUUID = loan.getBook().getId();
+        UUID studentUUID = loan.getBook().getId();
+        int expirationDays = loan.getDelivery().getExpatriationDays();
+        LoansStatus statusDelivery = loan.getDelivery().getLoansStatus();
+
+        Student student = studentRepository.findAllById(loan.getStudent().getId());
+        Book book = bookRepository.findAllById(loan.getBook().getId());
+                                                                                                                        // DONE -> TODO: get Data from RequestBody
+        if (student != null && book != null){
+            if (book.getQuantity() > 0){
+
+                Loans loans = new Loans();
+
+                loans.setId(UUID.randomUUID());
+                loans.setExpirationLoan(Date.valueOf(LocalDate.now().plusDays(expirationDays)));                        // DONE -> TODO: get expiration from request
+                loans.setStatusDelivery(statusDelivery);                                                                // DONE -> TODO: get status from request
                 loans.setStudentId(student);
                 loans.setBookId(book);
 
@@ -59,20 +93,23 @@ public class LoanService {
         return "fail";
     }
 
+    public String returnLoan(Loan loan) {
 
-    public String returnLoan(String studentUUID, String bookUUID, LoanStatus statusReturn) {
+        UUID bookUUID = loan.getBook().getId();
+        UUID studentUUID = loan.getBook().getId();
 
-        Student student = studentRepository.findAllById(UUID.fromString(studentUUID));
-        Book book = bookRepository.findAllById(UUID.fromString(bookUUID));
+        Student student = studentRepository.findAllById(studentUUID);
+        Book book = bookRepository.findAllById(bookUUID);
+
         if (student != null && book != null){
 
             List<Loans> loansList = loansRepository.findAllByStudentIdAndBookId(student, book);
-            Loans loan = loansList.get(0);
+            Loans loans = loansList.get(0);
 
-            loan.setReturnLoan(Date.valueOf(LocalDate.now()));
-            loan.setStatusReturn(statusReturn);
+            loans.setReturnLoan(Date.valueOf(LocalDate.now()));
+            loans.setStatusReturn(loan.getDelivery().getLoansStatus());
 
-            loansRepository.save(loan);
+            loansRepository.save(loans);
 
             updateBookQuantity(book, bookUUID, true);
             updateStudentLoanItems(student, studentUUID, true);
@@ -83,23 +120,25 @@ public class LoanService {
         return "fail";
     }
 
-    public void updateBookQuantity(Book book, String bookUUID, boolean type){
+    public void updateBookQuantity(Book book, UUID bookUUID, boolean type){
+
         if (type){
 
-            bookRepository.setBookQuantity((book.getQuantity() + 1), UUID.fromString(bookUUID));
+            bookRepository.setBookQuantity((book.getQuantity() + 1), bookUUID);
         }else {
 
-            bookRepository.setBookQuantity((book.getQuantity() - 1), UUID.fromString(bookUUID));
+            bookRepository.setBookQuantity((book.getQuantity() - 1), bookUUID);
         }
     }
 
-    public void updateStudentLoanItems(Student student, String studentUUID, boolean type){
+    public void updateStudentLoanItems(Student student, UUID studentUUID, boolean type){
+
         if (!type){
 
-            studentRepository.setStudentLoanItems((student.getLoanItems() + 1), UUID.fromString(studentUUID));
+            studentRepository.setStudentLoanItems((student.getLoanItems() + 1), studentUUID);
         }else {
 
-            studentRepository.setStudentLoanItems((student.getLoanItems() - 1), UUID.fromString(studentUUID));
+            studentRepository.setStudentLoanItems((student.getLoanItems() - 1), studentUUID);
         }
     }
 
