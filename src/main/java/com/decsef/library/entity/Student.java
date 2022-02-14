@@ -3,8 +3,6 @@ package com.decsef.library.entity;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -25,8 +23,8 @@ public class Student {
     @Column(name = "address", nullable = false)
     private String address;
 
-    @Column(name = "loan_items")
-    private int loanItems;
+    @Column(name = "items")
+    private int items;
 
     @Column(name = "status")
     private boolean status;

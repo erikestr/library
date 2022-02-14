@@ -105,16 +105,17 @@ public class LoanService {
 
     public void updateStudentLoanItems(Student student, UUID studentUUID, boolean type){
 
-        int loanItems = student.getLoanItems();
+        int loanItems = student.getItems();
         int loanItemsFinal;
         if(type){
 
             loanItemsFinal = loanItems - 1;
         }else {
-
+            System.out.println("FALSE");
             loanItemsFinal = loanItems + 1;
         }
-        studentRepository.setStudentLoanItems(loanItemsFinal, studentUUID);
+        System.out.println("loanItemsFinal = " + loanItemsFinal);
+        studentRepository.setStudentItems(loanItemsFinal, studentUUID);
     }
 
 }
