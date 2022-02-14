@@ -14,7 +14,7 @@ public interface StudentRepository extends JpaRepository<Student, UUID> {
     Student findAllById(UUID uuid);
 
     @Transactional
-    @Modifying
+    @Modifying(flushAutomatically = true)
     @Query("UPDATE Student s SET s.items = ?1 WHERE s.id = ?2")
     void setStudentItems(int items, UUID uuid);
 }

@@ -1,6 +1,7 @@
 package com.decsef.library.dto;
 
 import com.decsef.library.entity.Book;
+import com.decsef.library.entity.Loans;
 import com.decsef.library.entity.Student;
 import lombok.Data;
 
@@ -11,4 +12,5 @@ public class Loan {
     private Book book;
     private Delivery loanDelivery;
     private Return loanReturn;
+    private Loans loans;
 }

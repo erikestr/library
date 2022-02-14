@@ -13,13 +13,11 @@ import java.util.UUID;
 @Getter
 @Setter
 public class Book {
+
     @Id
 //    @GeneratedValue
     @Column(name = "id", nullable = false)
     private UUID id;
-
-    @OneToMany(mappedBy = "bookId")
-    private List<Loans> loans;
 
     @ManyToOne
     @JoinColumn(nullable = false)

@@ -14,7 +14,7 @@ public interface BookRepository extends JpaRepository<Book, UUID> {
     Book findAllById(UUID uuid);
 
     @Transactional
-    @Modifying
+    @Modifying(flushAutomatically = true)
     @Query("UPDATE Book b SET b.quantity = ?1 WHERE b.id = ?2")
     void setBookQuantity(int quantity, UUID uuid);
 }

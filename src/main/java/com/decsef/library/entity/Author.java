@@ -1,6 +1,7 @@
 package com.decsef.library.entity;
 
 import lombok.Data;
+import lombok.Generated;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -10,12 +11,11 @@ import java.util.UUID;
 @Entity
 @Data
 public class Author {
+
     @Id
+    @Generated
     @Column(name = "id", nullable = false)
     private UUID id;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "author")
-    private Set<Book> books;
 
     @Column(name = "first_name", nullable = false)
     private String firstName;
@@ -51,6 +51,7 @@ public class Author {
     private String remarkableWork;
 
     public Author(UUID id, String firstName, String lastName, String nationality, String bornCountry, String bornState, String bornCity, Date dateBorn, Date dateDeath, String occupation, String education, String remarkableWork) {
+
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;

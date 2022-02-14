@@ -1,6 +1,8 @@
 package com.decsef.library.entity;
 
 import lombok.Data;
+import lombok.Generated;
+import lombok.Getter;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -10,7 +12,7 @@ import java.util.UUID;
 public class Student {
 
     @Id
-//    @GeneratedValue
+    @Generated
     @Column(name = "id", nullable = false)
     private UUID id;
 

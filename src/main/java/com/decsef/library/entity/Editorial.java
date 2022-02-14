@@ -1,5 +1,6 @@
 package com.decsef.library.entity;
 
+import lombok.Generated;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,12 +13,11 @@ import java.util.UUID;
 @Getter
 @Setter
 public class Editorial {
+
     @Id
+    @Generated
     @Column(name = "id", nullable = false)
     private UUID id;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "editorial")
-    private Set<Book> books;
 
     @Column(name = "name", nullable = false)
     private String name;

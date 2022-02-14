@@ -24,74 +24,138 @@ public class LoanService {
     private final BookRepository bookRepository;
     private final LoansRepository loansRepository;
 
-    public String registerLoan(Loan loan) {
+    public Loans registerLoan(Loan loan) {
+
+        // TODO: fix Update Student
 
         UUID bookUUID = loan.getBook().getId();
         UUID studentUUID = loan.getBook().getId();
         int expirationDays = loan.getLoanDelivery().getExpatriationDays();
         LoansStatus statusDelivery = loan.getLoanDelivery().getLoansStatus();
 
-        Student student = studentRepository.findAllById(loan.getStudent().getId());
-        Book book = bookRepository.findAllById(loan.getBook().getId());
-                                                                                                                        // DONE -> TODO: get Data from RequestBody
-        if (student != null && book != null){
-            if (book.getQuantity() > 0){
+        Student student = studentRepository.findById(loan.getStudent().getId()).orElseThrow(
+                () -> new IllegalStateException(
+                        "student with id "+loan.getStudent().getId()+" does not exist")
+        );
 
-                Loans loans = new Loans();
+        Book book = bookRepository.findById(loan.getBook().getId()).orElseThrow(
+                () -> new IllegalStateException(
+                        "book with id "+ loan.getBook().getId() +" does not exist")
+        );
 
-                loans.setId(UUID.randomUUID());
-                loans.setExpirationLoan(Date.valueOf(LocalDate.now().plusDays(expirationDays)));                        // DONE -> TODO: get expiration from request
-                loans.setStatusDelivery(statusDelivery);                                                                // DONE -> TODO: get status from request
-                loans.setStudentId(student);
-                loans.setBookId(book);
+        if (!student.isStatus()){
 
-                loansRepository.save(loans);
-
-                updateBookQuantity(book, bookUUID, false);
-                updateStudentLoanItems(student, studentUUID, false);
-
-                return "pass";
-            }else {
-
-                throw new IllegalStateException("the book is not available");
-            }
+            throw new IllegalStateException("student "+student.getFirstName()+" "+ student.getLastName()+" is unavailable");
         }
 
-        return "fail";
+        if (book.getQuantity() > 0){
+
+            List<Loans> loansList = loansRepository.findAllByStudentIdAndBookIdOrderByReturnLoanDesc(student, book);
+
+            if (loansList.isEmpty()){
+
+                UUID actualLoan = createLoan(bookUUID,
+                        studentUUID,
+                        expirationDays,
+                        statusDelivery,
+                        student,
+                        book);
+
+                return loansRepository.getById(actualLoan);
+            } else {
+
+                Loans lastLoan = loansList.get(0);
+
+                if (lastLoan.getReturnLoan() != null){
+                    UUID actualLoan = createLoan(bookUUID,
+                            studentUUID,
+                            expirationDays,
+                            statusDelivery,
+                            student,
+                            book);
+                    return loansRepository.getById(actualLoan);
+                }
+
+                throw new IllegalStateException("the book is already loan to the actual student");
+            }
+        }else {
+
+            throw new IllegalStateException("the book is not available");
+        }
     }
 
-    public String returnLoan(Loan loan) {
+    private UUID createLoan(UUID bookUUID,
+                            UUID studentUUID,
+                            int expirationDays,
+                            LoansStatus statusDelivery,
+                            Student student, Book book) {
+
+        Loans loans = new Loans();
+
+        loans.setId(UUID.randomUUID());
+        loans.setExpirationLoan(Date.valueOf(LocalDate.now().plusDays(expirationDays)));
+        loans.setStatusDelivery(statusDelivery);
+        loans.setStudentId(student);
+        loans.setBookId(book);
+
+        UUID actualLoan = loans.getId();
+
+        loansRepository.save(loans);
+
+        updateStudentLoanItems(student.getItems(), studentUUID, false);
+        updateBookQuantity(book, bookUUID, false);
+
+        return actualLoan;
+    }
+
+    public Loans returnLoan(Loan loan) {
 
         UUID bookUUID = loan.getBook().getId();
         UUID studentUUID = loan.getStudent().getId();
 
-        Student student = studentRepository.findAllById(studentUUID);
-        Book book = bookRepository.findAllById(bookUUID);
+        Student student = studentRepository.findById(loan.getStudent().getId()).orElseThrow(
+                () -> new IllegalStateException(
+                        "student with id "+loan.getStudent().getId()+" does not exist")
+        );
+
+        Book book = bookRepository.findById(loan.getBook().getId()).orElseThrow(
+                () -> new IllegalStateException(
+                        "book with id "+ loan.getBook().getId() +" does not exist")
+        );
+
         if (student != null && book != null){
 
-            List<Loans> loansList = loansRepository.findAllByStudentIdAndBookId(student, book);
+            List<Loans> loansList = loansRepository.findAllByStudentIdAndBookIdOrderByReturnLoanDesc(student, book);
             Loans loans = loansList.get(0);
 
-            if (!loansList.isEmpty() && loans.getReturnLoan() == null){
+            if (!loansList.isEmpty() && loans.getReturnLoan() == null) {
+
                 loans.setReturnLoan(Date.valueOf(LocalDate.now()));
                 loans.setStatusReturn(loan.getLoanReturn().getLoansStatus());
 
                 loansRepository.save(loans);
 
+                UUID actualLoan = loans.getId();
+
                 updateBookQuantity(book, bookUUID, true);
-                updateStudentLoanItems(student, studentUUID, true);
+                updateStudentLoanItems(student.getItems(), studentUUID, true);
 
-                return "pass";
+                return loansRepository.getById(actualLoan);
+            } else {
+
+                throw new IllegalStateException("noting to do");
             }
-        }
+        } else {
 
-        return "fail";
+            throw new IllegalStateException("its not possible find actual student or book");
+        }
     }
 
     public void updateBookQuantity(Book book, UUID bookUUID, boolean type){
 
         int bookQuantity = book.getQuantity();
         int bookQuantityFinal;
+
         if (type){
 
             bookQuantityFinal = bookQuantity + 1;
@@ -103,19 +167,16 @@ public class LoanService {
         bookRepository.setBookQuantity(bookQuantityFinal, bookUUID);
     }
 
-    public void updateStudentLoanItems(Student student, UUID studentUUID, boolean type){
-
-        int loanItems = student.getItems();
-        int loanItemsFinal;
+    public void updateStudentLoanItems(int loanItems, UUID studentUUID, boolean type){
         if(type){
 
-            loanItemsFinal = loanItems - 1;
+            loanItems--;
         }else {
-            System.out.println("FALSE");
-            loanItemsFinal = loanItems + 1;
+
+            loanItems++;
         }
-        System.out.println("loanItemsFinal = " + loanItemsFinal);
-        studentRepository.setStudentItems(loanItemsFinal, studentUUID);
+
+        studentRepository.setStudentItems(loanItems, studentUUID);
     }
 
 }

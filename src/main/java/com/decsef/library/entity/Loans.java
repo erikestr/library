@@ -10,8 +10,8 @@ import java.util.UUID;
 @Entity
 @Data
 public class Loans {
+
     @Id
-    @Generated
     @Column(name = "id", nullable = false)
     private UUID id;
 
