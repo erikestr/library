@@ -9,5 +9,6 @@ public class Loan {
 
     private Student student;
     private Book book;
-    private Delivery delivery;
+    private Delivery loanDelivery;
+    private Return loanReturn;
 }

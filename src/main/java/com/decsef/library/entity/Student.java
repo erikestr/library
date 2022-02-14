@@ -31,11 +31,12 @@ public class Student {
     @Column(name = "status")
     private boolean status;
 
-    public Student(UUID id, String firstName, String lastName, String address) {
+    public Student(UUID id, String firstName, String lastName, String address, boolean status) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
+        this.status = status;
     }
 
     public Student() {

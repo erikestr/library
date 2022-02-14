@@ -28,8 +28,8 @@ public class LoanService {
 
         UUID bookUUID = loan.getBook().getId();
         UUID studentUUID = loan.getBook().getId();
-        int expirationDays = loan.getDelivery().getExpatriationDays();
-        LoansStatus statusDelivery = loan.getDelivery().getLoansStatus();
+        int expirationDays = loan.getLoanDelivery().getExpatriationDays();
+        LoansStatus statusDelivery = loan.getLoanDelivery().getLoansStatus();
 
         Student student = studentRepository.findAllById(loan.getStudent().getId());
         Book book = bookRepository.findAllById(loan.getBook().getId());
@@ -63,25 +63,26 @@ public class LoanService {
     public String returnLoan(Loan loan) {
 
         UUID bookUUID = loan.getBook().getId();
-        UUID studentUUID = loan.getBook().getId();
+        UUID studentUUID = loan.getStudent().getId();
 
         Student student = studentRepository.findAllById(studentUUID);
         Book book = bookRepository.findAllById(bookUUID);
-
         if (student != null && book != null){
 
             List<Loans> loansList = loansRepository.findAllByStudentIdAndBookId(student, book);
             Loans loans = loansList.get(0);
 
-            loans.setReturnLoan(Date.valueOf(LocalDate.now()));
-            loans.setStatusReturn(loan.getDelivery().getLoansStatus());
+            if (!loansList.isEmpty() && loans.getReturnLoan() == null){
+                loans.setReturnLoan(Date.valueOf(LocalDate.now()));
+                loans.setStatusReturn(loan.getLoanReturn().getLoansStatus());
 
-            loansRepository.save(loans);
+                loansRepository.save(loans);
 
-            updateBookQuantity(book, bookUUID, true);
-            updateStudentLoanItems(student, studentUUID, true);
+                updateBookQuantity(book, bookUUID, true);
+                updateStudentLoanItems(student, studentUUID, true);
 
-            return "pass";
+                return "pass";
+            }
         }
 
         return "fail";
@@ -89,24 +90,31 @@ public class LoanService {
 
     public void updateBookQuantity(Book book, UUID bookUUID, boolean type){
 
+        int bookQuantity = book.getQuantity();
+        int bookQuantityFinal;
         if (type){
 
-            bookRepository.setBookQuantity((book.getQuantity() + 1), bookUUID);
+            bookQuantityFinal = bookQuantity + 1;
         }else {
 
-            bookRepository.setBookQuantity((book.getQuantity() - 1), bookUUID);
+            bookQuantityFinal = bookQuantity - 1;
         }
+
+        bookRepository.setBookQuantity(bookQuantityFinal, bookUUID);
     }
 
     public void updateStudentLoanItems(Student student, UUID studentUUID, boolean type){
 
-        if (!type){
+        int loanItems = student.getLoanItems();
+        int loanItemsFinal;
+        if(type){
 
-            studentRepository.setStudentLoanItems((student.getLoanItems() + 1), studentUUID);
+            loanItemsFinal = loanItems - 1;
         }else {
 
-            studentRepository.setStudentLoanItems((student.getLoanItems() - 1), studentUUID);
+            loanItemsFinal = loanItems + 1;
         }
+        studentRepository.setStudentLoanItems(loanItemsFinal, studentUUID);
     }
 
 }

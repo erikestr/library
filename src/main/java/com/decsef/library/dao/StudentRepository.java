@@ -17,5 +17,5 @@ public interface StudentRepository extends JpaRepository<Student, UUID> {
     @Transactional
     @Modifying
     @Query("UPDATE Student s SET s.loanItems = ?1 WHERE s.id = ?2")
-    void setStudentLoanItems(int i, UUID fromString);
+    void setStudentLoanItems(int loanItems, UUID uuid);
 }

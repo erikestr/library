@@ -101,13 +101,15 @@ public class DataLoader implements ApplicationRunner {
                 UUID.fromString("e7ade77d-9412-45de-9f86-59e144443dd6"),
                 "Erik",
                 "Estrada",
-                "Av. Juarez 123"
+                "Av. Juarez 123",
+                true
         ));
         studentRepository.save(new Student(
                 UUID.fromString("e7ade77d-9412-45de-9f86-59e144443dd7"),
                 "Mariam",
                 "Perez",
-                "Av. Juarez 123"
+                "Av. Juarez 123",
+                true
         ));
     }
 }
