@@ -64,19 +64,23 @@ public class LoanService {
 
         Student student = studentRepository.findAllById(UUID.fromString(studentUUID));
         Book book = bookRepository.findAllById(UUID.fromString(bookUUID));
+        if (student != null && book != null){
 
-        List<Loans> loansList = loansRepository.findAllByStudentIdAndBookId(student, book);
-        Loans loan = loansList.get(0);
+            List<Loans> loansList = loansRepository.findAllByStudentIdAndBookId(student, book);
+            Loans loan = loansList.get(0);
 
-        loan.setReturnLoan(Date.valueOf(LocalDate.now()));
-        loan.setStatusReturn(statusReturn);
+            loan.setReturnLoan(Date.valueOf(LocalDate.now()));
+            loan.setStatusReturn(statusReturn);
 
-        loansRepository.save(loan);
+            loansRepository.save(loan);
 
-        updateBookQuantity(book, bookUUID, true);
-        updateStudentLoanItems(student, studentUUID, true);
+            updateBookQuantity(book, bookUUID, true);
+            updateStudentLoanItems(student, studentUUID, true);
 
-        return "pass";
+            return "pass";
+        }
+
+        return "fail";
     }
 
     public void updateBookQuantity(Book book, String bookUUID, boolean type){
