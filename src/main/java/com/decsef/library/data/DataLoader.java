@@ -1,13 +1,7 @@
 package com.decsef.library.data;
 
-import com.decsef.library.dao.AuthorRepository;
-import com.decsef.library.dao.BookRepository;
-import com.decsef.library.dao.EditorialRepository;
-import com.decsef.library.dao.StudentRepository;
-import com.decsef.library.entity.Author;
-import com.decsef.library.entity.Book;
-import com.decsef.library.entity.Editorial;
-import com.decsef.library.entity.Student;
+import com.decsef.library.dao.*;
+import com.decsef.library.entity.*;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -26,6 +20,7 @@ public class DataLoader implements ApplicationRunner {
     AuthorRepository authorRepository;
     BookRepository bookRepository;
     StudentRepository studentRepository;
+    StudentTestRepository studentTestRepository;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -110,6 +105,16 @@ public class DataLoader implements ApplicationRunner {
                 "Perez",
                 "Av. Juarez 123",
                 true
+        ));
+
+        studentTestRepository.save(new StudentTest(
+                "Erik","Estrada","asdafasf", true
+        ));
+        studentTestRepository.save(new StudentTest(
+                "Juan","Perez","asdafasf", true
+        ));
+        studentTestRepository.save(new StudentTest(
+                "Roberto","Lopez","asdafasf", true
         ));
     }
 }
