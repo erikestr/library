@@ -2,6 +2,7 @@ package com.decsef.library.controller;
 
 import com.decsef.library.dao.StudentRepository;
 import com.decsef.library.entity.Student;
+import com.decsef.library.exception.EntityNotFoundException;
 import com.decsef.library.service.LoanService;
 import com.decsef.library.service.StudentService;
 import lombok.AllArgsConstructor;
@@ -16,8 +17,13 @@ public class StudentController {
 
     private final StudentService studentService;
 
-    @PostMapping
+/*    @PostMapping
     public Student registerStudent(@RequestBody Student student){
+        return studentService.registerStudent(student);
+    }*/
+
+    @PostMapping
+    public Student registerStudent(@RequestBody Student student) throws EntityNotFoundException{
         return studentService.registerStudent(student);
     }
 

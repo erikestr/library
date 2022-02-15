@@ -8,6 +8,9 @@ import com.decsef.library.entity.Book;
 import com.decsef.library.entity.Loans;
 import com.decsef.library.entity.LoansStatus;
 import com.decsef.library.dto.Loan;
+import com.decsef.library.exception.ApiRequestException;
+import com.decsef.library.exception.BookAlreadyLoanException;
+import com.decsef.library.exception.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +27,7 @@ public class LoanService {
     private final BookRepository bookRepository;
     private final LoansRepository loansRepository;
 
-    public Loans registerLoan(Loan loan) {
+    /*public Loans registerLoan(Loan loan) {
 
         // TODO: fix Update Student
 
@@ -39,7 +42,7 @@ public class LoanService {
         );
 
         Book book = bookRepository.findById(loan.getBook().getId()).orElseThrow(
-                () -> new IllegalStateException(
+                () -> new ApiRequestException(
                         "book with id "+ loan.getBook().getId() +" does not exist")
         );
 
@@ -81,6 +84,52 @@ public class LoanService {
         }else {
 
             throw new IllegalStateException("the book is not available");
+        }
+    }*/
+
+    public Loans registerLoan(Loan loan) {
+
+        // TODO: fix Update Student
+
+        UUID bookUUID = loan.getBook().getId();
+        UUID studentUUID = loan.getBook().getId();
+        int expirationDays = loan.getLoanDelivery().getExpatriationDays();
+        LoansStatus statusDelivery = loan.getLoanDelivery().getLoansStatus();
+        Student student = studentRepository.findById(loan.getStudent().getId()).orElseThrow(
+                () -> new EntityNotFoundException(LoanService.class, "student_id", loan.getStudent().getId().toString())
+        );
+
+        Book book = bookRepository.findById(loan.getBook().getId()).orElseThrow(
+                () -> new ApiRequestException("book not found")
+        );
+
+        List<Loans> loansList = loansRepository.findAllByStudentIdAndBookIdOrderByReturnLoanDesc(student, book);
+
+        if (loansList.isEmpty()){
+
+            UUID actualLoan = createLoan(bookUUID,
+                    studentUUID,
+                    expirationDays,
+                    statusDelivery,
+                    student,
+                    book);
+
+            return loansRepository.getById(actualLoan);
+        } else {
+
+            Loans lastLoan = loansList.get(0);
+
+            if (lastLoan.getReturnLoan() != null){
+                UUID actualLoan = createLoan(bookUUID,
+                        studentUUID,
+                        expirationDays,
+                        statusDelivery,
+                        student,
+                        book);
+                return loansRepository.getById(actualLoan);
+            }
+
+            throw new BookAlreadyLoanException("bookTittle", book.getTittle(), "studentName", student.getFirstName());
         }
     }
 
