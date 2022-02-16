@@ -1,5 +1,6 @@
 package com.decsef.library.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
@@ -15,6 +16,8 @@ import java.util.Set;
 public class DataRestConfig implements RepositoryRestConfigurer {
 
     private EntityManager entityManager;
+    @Value("${allowed.origins}")
+    private String[] theAllowedOrigins;
 
     public DataRestConfig(EntityManager entityManager){ this.entityManager = entityManager; }
 
@@ -23,6 +26,9 @@ public class DataRestConfig implements RepositoryRestConfigurer {
 
         /* Expose the UUIDS */
         exposeIds(config);
+
+        /* configure cors mapping */
+        cors.addMapping(config.getBasePath()+"/**").allowedOrigins(theAllowedOrigins);
     }
 
     private void exposeIds(RepositoryRestConfiguration config){
