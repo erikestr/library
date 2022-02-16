@@ -17,15 +17,15 @@ public class StudentController {
 
     private final StudentService studentService;
 
-/*    @PostMapping
+    @PostMapping
     public Student registerStudent(@RequestBody Student student){
         return studentService.registerStudent(student);
-    }*/
-
+    }
+/*
     @PostMapping
     public Student registerStudent(@RequestBody Student student) throws EntityNotFoundException{
         return studentService.registerStudent(student);
-    }
+    }*/
 
     @DeleteMapping
     public boolean deleteStudent(@RequestBody Student student){

@@ -16,14 +16,7 @@ public class StudentService {
     private final StudentRepository studentRepository;
 
     public Student registerStudent(Student student) {
-        Student studentSave = new Student();
-        studentSave = student;
-        studentSave.setId(UUID.randomUUID());
-        studentSave.setStatus(true);
-
-        studentRepository.save(studentSave);
-        return studentRepository.findAllById(studentSave.getId());
-/*        if (student.getFirstName() != null && student.getLastName() != null && student.getAddress() != null){
+        if (student.getFirstName() != null && student.getLastName() != null && student.getAddress() != null){
 
             Student studentSave = new Student();
             studentSave = student;
@@ -34,7 +27,7 @@ public class StudentService {
             return studentRepository.findAllById(studentSave.getId());
         }
 
-        throw new IllegalStateException("nothing to do");*/
+        throw new IllegalStateException("nothing to do");
     }
 
     public boolean deleteStudent(Student student) {

@@ -10,5 +10,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RepositoryRestResource(path = "studentsT")
 public interface StudentTestRepository extends JpaRepository<StudentTest, Long> {
 
+
     Page<StudentTest> findStudentTestByNameContaining(@RequestParam("name") String name, Pageable pageable);
 }
