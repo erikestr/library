@@ -14,6 +14,9 @@ public class AppConfig implements WebMvcConfigurer {
     @Value("${spring.data.rest.base-path}")
     private String basePath;
 
+    @Value("${spring.data.rest.base-path}")
+    private String basePathApi;
+
     @Override
     public void addCorsMappings(CorsRegistry cors) {
 

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
+@CrossOrigin(origins = {"https://localhost:4200"})
 @RequestMapping("/api/student")
 @AllArgsConstructor
 public class StudentController {
