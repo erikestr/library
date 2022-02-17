@@ -15,7 +15,7 @@ import java.util.UUID;
 public class Book {
 
     @Id
-//    @GeneratedValue
+    @GeneratedValue
     @Column(name = "id", nullable = false)
     private UUID id;
 

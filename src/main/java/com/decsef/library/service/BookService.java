@@ -1,6 +1,7 @@
 package com.decsef.library.service;
 
 import com.decsef.library.dao.AuthorRepository;
+import com.decsef.library.dao.BookRepository;
 import com.decsef.library.dto.Books;
 import com.decsef.library.entity.Author;
 import com.decsef.library.entity.Book;
@@ -13,7 +14,8 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class BookService {
 
-    AuthorRepository authorRepository;
+    private final AuthorRepository authorRepository;
+    private final BookRepository bookRepository;
 
     public Book addBook(Books books) {
         return null;
@@ -24,6 +26,11 @@ public class BookService {
     }
 
     public Book updateBook(Books books) {
+        Book actualBook = bookRepository.findById(books.getBook().getId()).orElseThrow(
+                () -> new IllegalStateException(
+                        "book with id "+books.getBook().getId()+" does not exist")
+        );
+
         return null;
     }
 

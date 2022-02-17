@@ -17,6 +17,7 @@ import java.util.UUID;
 public interface StudentRepository extends JpaRepository<Student, UUID> {
 
     Student findAllById(@RequestParam("uuid") UUID uuid);
+
     Page<Student> findById(@RequestParam("uuid") UUID uuid, Pageable pageable);
 
     Page<Student> findByFirstNameContaining(@RequestParam("name") String name, Pageable pageable);
