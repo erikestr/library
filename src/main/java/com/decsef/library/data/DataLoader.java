@@ -44,8 +44,8 @@ public class DataLoader implements ApplicationRunner {
 
         authorRepository.save(new Author(
                 UUID.fromString("e7ade77d-9412-45de-9f86-59e144443dd1"),
-                "Author",
-                "1",
+                "Joaquin",
+                "Lopez",
                 "Mexican",
                 "Mexico",
                 "CDMX",
@@ -58,8 +58,8 @@ public class DataLoader implements ApplicationRunner {
         ));
         authorRepository.save(new Author(
                 UUID.fromString("e7ade77d-9412-45de-9f86-59e144443dd3"),
-                "Author",
-                "2",
+                "Diego",
+                "Rivera",
                 "Mexican",
                 "Mexico",
                 "CDMX",

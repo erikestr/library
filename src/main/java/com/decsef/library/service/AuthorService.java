@@ -16,7 +16,6 @@ public class AuthorService {
     private final AuthorRepository authorRepository;
 
     public Author registerAuthor(Author author) {
-        System.out.println("author = " + author);
         if (author.getFirstName() != null && author.getLastName() != null && author.getNationality() != null &&
                 author.getBornCountry() != null && author.getBornState() != null &&
                 author.getBornCity() != null && author.getDateBorn() != null && author.getOccupation() != null &&
